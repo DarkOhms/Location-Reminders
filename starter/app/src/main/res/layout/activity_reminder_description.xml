@@ -20,14 +20,23 @@
         <!-- TODO: Add the design of the reminder details -->
 
         <TextView
+            android:id="@+id/reminderDetailsName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Reminder Details"
+            android:text="@{reminderDataItem.component1()}"
             android:textSize="@dimen/text_size_large"
+            android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/reminderDetailsDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_medium"
+            android:text="@{reminderDataItem.component2()}" />
     </LinearLayout>
 </layout>

@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Location Reminders</string>
+    //API key
+    <string name="maps_api_key">"${API_KEY}"</string>
+
     <string name="error_happened">Error happened</string>
     <string name="retry">Retry</string>
     <string name="no_data">No Data</string>
@@ -40,4 +43,14 @@
     <string name="geofence_too_many_geofences">Your app has registered too many geofences.</string>
     <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call.</string>
     <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
+    <string name="reminder_instruction_title">Choose Location</string>
+    <string name="reminder_instruction_message">Choose a location or a point of interest for your reminder.</string>
+    <string name="ok">ok</string>
+    <string name="dont_show_again">Don\'t show this again</string>
+    <string name="save_location">Save Location</string>
+
+    <!--Permission strings-->
+    <string name="permission_required">Permission Required</string>
+    <string name="background_permission_rationale">This app needs background location services to be active in order to generate location based reminders while in the background.  Please select \"Allow
+        all the time\" for location permission.</string>
 </resources>

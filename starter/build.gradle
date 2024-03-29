@@ -1,8 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     ext {
-        gradleVersion = '7.4.2'
+        gradleVersion = '8.2.1'
         kotlinVersion = '1.8.0'
         navigationVersion = '2.5.3'
 
@@ -12,9 +11,11 @@ buildscript {
         targetSdkVersion = 33
 
         // App dependencies
-        appCompatVersion = '1.6.1'
+        activity_version = '1.6.0-rc01'
+        appCompatVersion = '1.6.0-rc01'
         archLifecycleVersion = '2.2.0'
         archLifecycleKtxVersion = '2.6.1'
+        fragment_version = "1.6.2"
         materialVersion = '1.8.0'
         mockitoVersion = '5.2.0'
         constraintVersion = '2.1.4'
@@ -35,7 +36,9 @@ buildscript {
         playServicesLocationVersion = '21.0.1'
         playServicesMapsVersion = '18.1.0'
         firebaseUiAuthVersion = '8.0.2'
+        playServicesAuthVersion = '20.3.0'
         firebaseAuthKtxVersion = '21.2.0'
+        workVersion = '2.7.1'
     }
 
     repositories {

@@ -27,7 +27,12 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+
+    }
+    compileOptions {
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
     }
     testOptions.unitTests {
         includeAndroidResources = true
@@ -40,6 +45,7 @@ android {
 //    }
     buildFeatures {
         dataBinding true
+        buildConfig true
     }
 }
 
@@ -58,10 +64,22 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleKtxVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    // Java language implementation
+    implementation "androidx.fragment:fragment:$fragment_version"
+    // Kotlin
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+    // Java language implementation
+    implementation "androidx.activity:activity:$activity_version"
+    // Kotlin
+    implementation "androidx.activity:activity-ktx:$activity_version"
+
     implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
 
     // Room dependencies
     implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.work:work-runtime-ktx:$workVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
         // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$roomVersion"
@@ -110,6 +128,14 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$playServicesMapsVersion"
 
     // Firebase
+    implementation platform('com.google.firebase:firebase-bom:32.7.2')
     implementation "com.firebaseui:firebase-ui-auth:$firebaseUiAuthVersion"
     implementation "com.google.firebase:firebase-auth-ktx:$firebaseAuthKtxVersion"
+
+    //Google services
+    implementation "com.google.android.gms:play-services-auth:$playServicesAuthVersion"
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.9.0'
+
 }

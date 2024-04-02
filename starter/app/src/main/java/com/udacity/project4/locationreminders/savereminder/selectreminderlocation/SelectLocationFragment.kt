@@ -172,6 +172,7 @@ class SelectLocationFragment : BaseFragment() {
 
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
+            map.clear()
             val poiMarker = map.addMarker(
                 MarkerOptions()
                     .position(poi.latLng)
@@ -188,6 +189,7 @@ class SelectLocationFragment : BaseFragment() {
 
     private fun setMapLongClick(map: GoogleMap){
         map.setOnMapLongClickListener { latLng ->
+           map.clear()
             _viewModel.latitude.value = latLng.latitude
             _viewModel.longitude.value = latLng.longitude
             _viewModel.selectedPOI.value = null

@@ -14,10 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -26,8 +22,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.authentication.LoginViewModel
 import com.udacity.project4.databinding.ActivityRemindersBinding
-import com.udacity.project4.locationreminders.geofence.GeofenceWorker
-import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 
 /**
  * The RemindersActivity that holds the reminders fragments
@@ -37,7 +31,6 @@ class RemindersActivity : AppCompatActivity(), MenuProvider {
     private lateinit var binding: ActivityRemindersBinding
     private lateinit var workRequest : WorkRequest
     private val loginViewModel by viewModels<LoginViewModel>()
-    private val saveReminderViewModel by viewModels<SaveReminderViewModel>()
     private var isLoggedIn = false
 
     //temporary user code
@@ -54,16 +47,15 @@ class RemindersActivity : AppCompatActivity(), MenuProvider {
         binding = ActivityRemindersBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        addMenuProvider(this, this)
 
         loginViewModel.authenticationState.observe(this, Observer{ authenticationState ->
             when(authenticationState){
                 LoginViewModel.AuthenticationState.AUTHENTICATED ->{
                     //add logout button
-                    addMenuProvider(this)
                     isLoggedIn = true
                 }else ->{
                     //remove logout button
-                    removeMenuProvider(this)
                     isLoggedIn = false
                 launchSignInFlow()
                 }
@@ -100,7 +92,8 @@ class RemindersActivity : AppCompatActivity(), MenuProvider {
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.main_menu, menu)
+        if(isLoggedIn)
+            menuInflater.inflate(R.menu.main_menu, menu)
     }
 
 
@@ -134,18 +127,6 @@ class RemindersActivity : AppCompatActivity(), MenuProvider {
             .build()
 
         signInLauncher.launch(signInIntent)
-    }
-
-    private fun startGeofenceWorker() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        workRequest = OneTimeWorkRequest.Builder(GeofenceWorker::class.java)
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(this).enqueue(workRequest)
     }
 
     private fun isPermissionGranted() : Boolean {

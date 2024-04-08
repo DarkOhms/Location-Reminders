@@ -93,6 +93,10 @@ class SaveReminderFragment : BaseFragment() {
 
 
         }
+        //checking 2 way binding
+        _viewModel.reminderTitle.observe(viewLifecycleOwner) { title ->
+            Log.d("SaveReminderFragment", "Title updated: $title")
+        }
 
         //location setup
         val locationClient = LocationServices.getFusedLocationProviderClient(requireContext())

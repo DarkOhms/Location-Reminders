@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import androidx.work.WorkRequest
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
@@ -29,7 +28,6 @@ import com.udacity.project4.databinding.ActivityRemindersBinding
 class RemindersActivity : AppCompatActivity(), MenuProvider {
 
     private lateinit var binding: ActivityRemindersBinding
-    private lateinit var workRequest : WorkRequest
     private val loginViewModel by viewModels<LoginViewModel>()
     private var isLoggedIn = false
 

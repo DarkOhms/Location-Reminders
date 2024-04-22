@@ -1,16 +1,27 @@
 package com.udacity.project4.locationreminders.savereminder
 
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.udacity.project4.locationreminders.MainCoroutineRule
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
-import kotlinx.coroutines.test.runTest
+import com.udacity.project4.locationreminders.data.dto.toReminderDataItem
+import com.udacity.project4.locationreminders.getOrAwaitValue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsEqual
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import kotlin.random.Random
 
+@RunWith(AndroidJUnit4::class)
+@Config(sdk = [32])
 class SaveReminderViewModelTest {
 
     private lateinit var dataSource: FakeDataSource
@@ -18,14 +29,26 @@ class SaveReminderViewModelTest {
     private lateinit var viewModel: SaveReminderViewModel
 
     //TODO: provide testing to the SaveReminderView and its live data objects
-    /*
+
+
+
+    //@get:Rule
+    //val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+
+    @ExperimentalCoroutinesApi
     @get:Rule
-    var instantTaskExecutorRule: InstantTaskExecutorRule()
+    var mainCoroutineRule = MainCoroutineRule()
 
-     */
 
-            @Before
-            fun setupViewModel(){
+
+    @Before
+    fun setup(){
+        setupViewModel()
+    }
+
+
+    fun setupViewModel(){
 
                 //setup viewModel with 3 items
                 val reminder1 = ReminderDTO("Get lunch", "remember to eat your veggies", "home", randomLatOrLong(), randomLatOrLong())
@@ -35,16 +58,38 @@ class SaveReminderViewModelTest {
                 remindersList = mutableListOf(reminder1, reminder2, reminder3)
                 dataSource = FakeDataSource(remindersList)
 
+                //val application = Mockito.mock(Application::class.java)
+
                 viewModel = SaveReminderViewModel(ApplicationProvider.getApplicationContext(), dataSource)
             }
 
     @Test
-    fun getTasks_requestsAllTasksFromRemoteDataSource() = runTest{
+    fun getReminders_requestsAllRemindersFromDataSource() = mainCoroutineRule.runBlockingTest{
         // When reminders are requested from the DataSource
         val reminders = dataSource.getReminders() as Result.Success
 
-        // Then tasks are loaded from the remote data source
+        // Then reminders are loaded from the data source
         assertThat(reminders.data, IsEqual(remindersList))
+    }
+
+
+    @Test
+    @ExperimentalCoroutinesApi
+    fun check_loading() = mainCoroutineRule.runBlockingTest{
+        //GIVEN a viewmodel with data
+
+        //WHEN a reminder is saved
+        val reminder = ReminderDTO("new reminder", "remember this", "somewhere", randomLatOrLong(), randomLatOrLong())
+        val reminderDataItem = reminder.toReminderDataItem()
+
+        mainCoroutineRule.dispatcher.pauseDispatcher()
+        viewModel.validateAndSaveReminder(reminderDataItem)
+
+        //THEN the LiveData isLoading is true
+        assertThat(viewModel.showLoading.getOrAwaitValue(), `is` (true))
+        mainCoroutineRule.dispatcher.resumeDispatcher()
+        assertThat(viewModel.showLoading.getOrAwaitValue(), `is` (false))
+
     }
 
     fun randomLatOrLong(): Double {

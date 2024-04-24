@@ -72,13 +72,31 @@ class SaveReminderViewModelTest {
         assertThat(reminders.data, IsEqual(remindersList))
     }
 
+    @Test
+    @ExperimentalCoroutinesApi
+    fun validate_and_save_reminder_shouldReturnError() = mainCoroutineRule.runBlockingTest {
+        //GIVEN a viewmodel with data
+
+        //WHEN a reminder is saved WITHOUT A TITLE
+        val reminder = ReminderDTO("", "remember this", "somewhere", randomLatOrLong(), randomLatOrLong())
+        val reminderDataItem = reminder.toReminderDataItem()
+
+        mainCoroutineRule.dispatcher.pauseDispatcher()
+        viewModel.validateAndSaveReminder(reminderDataItem)
+
+        //THEN the LiveData showErrorMessage is true
+        assertThat(viewModel.showErrorMessage.getOrAwaitValue(), `is` (true))
+        mainCoroutineRule.dispatcher.resumeDispatcher()
+        assertThat(viewModel.showErrorMessage.getOrAwaitValue(), `is` (false))
+    }
+
 
     @Test
     @ExperimentalCoroutinesApi
-    fun check_loading() = mainCoroutineRule.runBlockingTest{
+    fun validate_and_save_reminder_check_loading() = mainCoroutineRule.runBlockingTest{
         //GIVEN a viewmodel with data
 
-        //WHEN a reminder is saved
+        //WHEN a valid reminder is saved
         val reminder = ReminderDTO("new reminder", "remember this", "somewhere", randomLatOrLong(), randomLatOrLong())
         val reminderDataItem = reminder.toReminderDataItem()
 

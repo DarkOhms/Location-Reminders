@@ -52,5 +52,5 @@
     <!--Permission strings-->
     <string name="permission_required">Permission Required</string>
     <string name="background_permission_rationale">This app needs background location services to be active in order to generate location based reminders while in the background.  Please select \"Allow
-        all the time\" for location permission.</string>
+        all the time\" for location permission on the next screen then press back to see the map`.</string>
 </resources>

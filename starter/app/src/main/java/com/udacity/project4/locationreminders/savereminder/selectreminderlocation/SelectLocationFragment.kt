@@ -51,18 +51,7 @@ class SelectLocationFragment : BaseFragment() {
         //check api level for background permissions flow
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (!isBackgroundPermissionGranted()) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        requireActivity(),
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                    )
-                ) {
-                    Log.d("SelectLocationFragment", "shouldShowPermissionRational returned true")
-                    requestBackgroundPermission()
-                    explainBackgroundPermission(requireActivity())
-                }else{
-                    Log.d("SelectLocationFragment", "shouldShowPermissionRational returned false")
-                    requestBackgroundPermission()
-                }
+                requestBackgroundPermission()
             }
         }
     }
@@ -150,20 +139,6 @@ class SelectLocationFragment : BaseFragment() {
         return ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun explainBackgroundPermission(activity: Activity) {
-        val alertDialog = AlertDialog.Builder(activity)
-            .setTitle(R.string.permission_required)
-            .setMessage(getString(R.string.background_permission_rationale))
-            .setNeutralButton(R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-
-
-        alertDialog.show()
     }
 
     private fun enableMyLocation() {

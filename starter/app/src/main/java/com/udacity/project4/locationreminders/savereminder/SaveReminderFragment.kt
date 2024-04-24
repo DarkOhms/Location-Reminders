@@ -2,16 +2,21 @@ package com.udacity.project4.locationreminders.savereminder
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.Geofence
@@ -50,6 +55,23 @@ class SaveReminderFragment : BaseFragment() {
 
     private lateinit var currentLocation: Location
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (!isBackgroundPermissionGranted()) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        requireActivity(),
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    )
+                ) {
+                    Log.d("SelectLocationFragment", "shouldShowPermissionRational returned true")
+                    explainBackgroundPermission(requireActivity())
+                }else{
+                    Log.d("SaveReminderFragment", "shouldShowPermissionRational returned false")
+                }
+            }
+        }
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         geofencingClient = LocationServices.getGeofencingClient(requireActivity())
@@ -92,10 +114,6 @@ class SaveReminderFragment : BaseFragment() {
             //  2) save the reminder to the local db
 
 
-        }
-        //checking 2 way binding
-        _viewModel.reminderTitle.observe(viewLifecycleOwner) { title ->
-            Log.d("SaveReminderFragment", "Title updated: $title")
         }
 
         //location setup
@@ -144,6 +162,27 @@ class SaveReminderFragment : BaseFragment() {
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         ) === PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun isBackgroundPermissionGranted() : Boolean {
+
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun explainBackgroundPermission(activity: Activity) {
+        val alertDialog = AlertDialog.Builder(activity)
+            .setTitle(R.string.permission_required)
+            .setMessage(getString(R.string.background_permission_rationale))
+            .setNeutralButton(R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+
+        alertDialog.show()
     }
 
     private fun enableMyLocation() {

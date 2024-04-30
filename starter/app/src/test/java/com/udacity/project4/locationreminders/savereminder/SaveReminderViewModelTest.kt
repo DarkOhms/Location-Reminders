@@ -61,7 +61,7 @@ class SaveReminderViewModelTest {
                 //val application = Mockito.mock(Application::class.java)
 
                 viewModel = SaveReminderViewModel(ApplicationProvider.getApplicationContext(), dataSource)
-            }
+    }
 
     @Test
     fun getReminders_requestsAllRemindersFromDataSource() = mainCoroutineRule.runBlockingTest{
@@ -109,7 +109,6 @@ class SaveReminderViewModelTest {
         assertThat(viewModel.showLoading.getOrAwaitValue(), `is` (false))
 
     }
-
     fun randomLatOrLong(): Double {
         val min = -180.0 // Minimum allowed value (longitude)
         val max = 180.0  // Maximum allowed value (longitude, can be adjusted for latitude)

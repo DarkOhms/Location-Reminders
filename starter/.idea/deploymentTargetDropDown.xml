@@ -5,6 +5,21 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="clickAdd_navigateToSaveReminderFragment()">
+        <State />
+      </entry>
+      <entry key="getReminder_retrievesReminder()">
+        <State />
+      </entry>
+      <entry key="getReminders_whenEmpty_shouldReturnEmptyLIst()">
+        <State />
+      </entry>
+      <entry key="reminderAdded_DisplayedInUi()">
+        <State />
+      </entry>
+      <entry key="whenErrorCondition_ToastDisplayedInUi()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

@@ -87,6 +87,9 @@ dependencies {
     // Koin
     implementation "io.insert-koin:koin-android:$koinVersion"
 
+    testImplementation("io.insert-koin:koin-test-junit:$koinVersion")
+    implementation "io.insert-koin:koin-test:$koinVersion"
+
     // Dependencies for local unit tests
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.arch.core:core-testing:$archTestingVersion"

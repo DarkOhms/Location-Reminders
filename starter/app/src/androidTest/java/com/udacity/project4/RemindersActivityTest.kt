@@ -1,15 +1,20 @@
 package com.udacity.project4
 
+import android.Manifest
 import android.app.Application
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.udacity.project4.R.id.addReminderFAB
+import androidx.test.rule.GrantPermissionRule
 import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.local.LocalDB
@@ -22,6 +27,7 @@ import com.udacity.project4.utils.monitorActivity
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -46,6 +52,12 @@ class RemindersActivityTest :
      * As we use Koin as a Service Locator Library to develop our code, we'll also use Koin to test our code.
      * at this step we will initialize Koin related code to be able to use it in out testing.
      */
+
+    @Rule
+    @JvmField
+    var mRuntimePermissionRuleFine: GrantPermissionRule? = GrantPermissionRule
+        .grant(Manifest.permission.ACCESS_FINE_LOCATION)
+
     @Before
     fun init() {
         stopKoin()//stop the original app koin
@@ -101,10 +113,22 @@ class RemindersActivityTest :
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
-        onView(withId(addReminderFAB)).perform(ViewActions.click())
-        Thread.sleep(2000)
+        //navigate to the SaveDetailsFragment
+        onView(withId(R.id.addReminderFAB)).check(matches(isDisplayed()))
+        onView(withId(R.id.addReminderFAB)).perform(ViewActions.click())
+
+        //enter title and description
+        onView(withId(R.id.reminderTitle)).perform(typeText("Remember This!"))
+        onView(withId(R.id.reminderDescription)).perform(typeText("I'm so glad you remember!"))
+
+
+        //navigate to select location
+        onView(withId(R.id.selectLocation)).perform(click())
+
 
         //THEN the same reminder is displayed in the reminders list
+
+        activityScenario.close()
     }
 
 }

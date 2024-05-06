@@ -8,10 +8,10 @@
       <entry key="clickAdd_navigateToSaveReminderFragment()">
         <State />
       </entry>
-      <entry key="getReminder_retrievesReminder()">
+      <entry key="createReminder_confirmReminderDisplays()">
         <State />
       </entry>
-      <entry key="getReminders_whenEmpty_shouldReturnEmptyLIst()">
+      <entry key="getReminder_retrievesReminder()">
         <State />
       </entry>
       <entry key="reminderAdded_DisplayedInUi()">

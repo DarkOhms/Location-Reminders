@@ -12,9 +12,12 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
+import androidx.test.uiautomator.UiDevice
 import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.local.LocalDB
@@ -107,6 +110,8 @@ class RemindersActivityTest :
 //    TODO: add End to End testing to the app
     @Test
     fun createReminder_confirmReminderDisplays(){
+        val stringToTest = "Remember This!"
+
         //GIVEN a user is logged in with the relevant permissions
 
         //WHEN the user clicks on the add button and goes through the process to add a reminder
@@ -117,16 +122,29 @@ class RemindersActivityTest :
         onView(withId(R.id.addReminderFAB)).check(matches(isDisplayed()))
         onView(withId(R.id.addReminderFAB)).perform(ViewActions.click())
 
-        //enter title and description
-        onView(withId(R.id.reminderTitle)).perform(typeText("Remember This!"))
+        //enter test title and description
+        onView(withId(R.id.reminderTitle)).perform(typeText(stringToTest))
         onView(withId(R.id.reminderDescription)).perform(typeText("I'm so glad you remember!"))
 
 
         //navigate to select location
         onView(withId(R.id.selectLocation)).perform(click())
 
+        //simulate click
+        val device = UiDevice.getInstance(getInstrumentation())
+        device.click(52.50648406893113.toInt(), 13.443535038592412.toInt())
+
+        //navigate back to save location
+        onView(withId(R.id.saveLocationButton)).perform(click())
+
+        //save the reminder
+        onView(withId(R.id.saveReminder)).perform(click())
+
+
+
 
         //THEN the same reminder is displayed in the reminders list
+        onView(withText(stringToTest)).check(matches(isDisplayed()))
 
         activityScenario.close()
     }

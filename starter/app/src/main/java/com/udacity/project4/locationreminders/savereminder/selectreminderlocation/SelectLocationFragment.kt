@@ -82,7 +82,7 @@ class SelectLocationFragment : BaseFragment() {
         @SuppressLint("MissingPermission")
         if(isPermissionGranted()){
             val locationResultTask = locationClient.lastLocation
-            locationResultTask.addOnSuccessListener { location:Location ->
+            locationResultTask.addOnSuccessListener { location:Location? ->
                 currentLocation = location
             }
         }
@@ -100,13 +100,10 @@ class SelectLocationFragment : BaseFragment() {
             setPoiClick(map)
             setMapLongClick(map)
             map.uiSettings.isZoomControlsEnabled = true
-            if(isPermissionGranted()){
-                enableMyLocation()
-            }
             var latLng = LatLng(-34.0, 151.0)
-            enableMyLocation()
             @SuppressLint("MissingPermission")
             if(isPermissionGranted()){
+                enableMyLocation()
                 Log.d("MapsAsync" , "Permission is Granted")
                 val locationResultTask = locationClient.lastLocation
                 locationResultTask.addOnSuccessListener { location:Location ->

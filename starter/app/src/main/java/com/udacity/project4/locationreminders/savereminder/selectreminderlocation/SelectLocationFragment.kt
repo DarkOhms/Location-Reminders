@@ -98,7 +98,7 @@ class SelectLocationFragment : BaseFragment() {
             // TODO: add style to the map
             setMapStyle(map)
             setPoiClick(map)
-            setMapLongClick(map)
+            setMapClick(map)
             map.uiSettings.isZoomControlsEnabled = true
             var latLng = LatLng(-34.0, 151.0)
             @SuppressLint("MissingPermission")
@@ -159,8 +159,8 @@ class SelectLocationFragment : BaseFragment() {
         }
     }
 
-    private fun setMapLongClick(map: GoogleMap){
-        map.setOnMapLongClickListener { latLng ->
+    private fun setMapClick(map: GoogleMap){
+        map.setOnMapClickListener() { latLng ->
            map.clear()
             _viewModel.latitude.value = latLng.latitude
             _viewModel.longitude.value = latLng.longitude

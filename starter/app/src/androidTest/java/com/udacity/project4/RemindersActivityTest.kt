@@ -1,15 +1,18 @@
 package com.udacity.project4
 
 import android.Manifest
+import android.app.Activity
 import android.app.Application
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -28,6 +31,7 @@ import com.udacity.project4.utils.DataBindingIdlingResource
 import com.udacity.project4.utils.EspressoIdlingResource
 import com.udacity.project4.utils.monitorActivity
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -49,6 +53,7 @@ class RemindersActivityTest :
 
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
+    private lateinit var activityContext: Activity
     private val dataBindingIdlingResource = DataBindingIdlingResource()
 
     /**
@@ -112,10 +117,14 @@ class RemindersActivityTest :
     fun createReminder_confirmReminderDisplays(){
         val stringToTest = "Remember This!"
 
-        //GIVEN a user is logged in with the relevant permissions
+
+        //GIVEN a user is logged in with the relevant permissions and location on
 
         //WHEN the user clicks on the add button and goes through the process to add a reminder
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
+        activityScenario.onActivity { activity ->
+            activityContext = activity
+        }
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
         //navigate to the SaveDetailsFragment
@@ -125,14 +134,18 @@ class RemindersActivityTest :
         //enter test title and description
         onView(withId(R.id.reminderTitle)).perform(typeText(stringToTest))
         onView(withId(R.id.reminderDescription)).perform(typeText("I'm so glad you remember!"))
+        closeSoftKeyboard()
 
 
         //navigate to select location
         onView(withId(R.id.selectLocation)).perform(click())
 
         //simulate click
+        Thread.sleep(2000L)
         val device = UiDevice.getInstance(getInstrumentation())
-        device.click(52.50648406893113.toInt(), 13.443535038592412.toInt())
+
+        device.click(300.506484068931.toInt(), 300.4435350385924.toInt())
+        Thread.sleep(2000L)
 
         //navigate back to save location
         onView(withId(R.id.saveLocationButton)).perform(click())
@@ -140,13 +153,15 @@ class RemindersActivityTest :
         //save the reminder
         onView(withId(R.id.saveReminder)).perform(click())
 
+        Thread.sleep(2000L)
 
 
-
-        //THEN the same reminder is displayed in the reminders list
+        //THEN the same reminder is displayed in the reminders list and a toast displayed
         onView(withText(stringToTest)).check(matches(isDisplayed()))
+        onView(withText(R.string.reminder_saved)).inRoot(withDecorView(not(activityContext.window.decorView))).check(matches(isDisplayed()))
 
-        activityScenario.close()
+
+    activityScenario.close()
     }
 
 }

@@ -11,7 +11,7 @@ import com.udacity.project4.locationreminders.data.dto.succeeded
 import com.udacity.project4.randomLatOrLong
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.After
 import org.junit.Assert.assertThat
@@ -49,7 +49,7 @@ class RemindersLocalRepositoryTest {
     }
 
     @Test
-    fun getReminder_retrievesReminder() = runBlocking {
+    fun getReminder_retrievesReminder() = runTest {
         // GIVEN - A new task saved in the database.
         val newReminder =
             ReminderDTO("title", "description", "a place", randomLatOrLong(), randomLatOrLong())
@@ -64,6 +64,24 @@ class RemindersLocalRepositoryTest {
         result as Result.Success
         assertThat(result.data.title, `is`(newReminder.title))
         assertThat(result.data.description, `is`(newReminder.description))
+
+    }
+
+    @Test
+    fun getReminder_shouldReturnError() = runTest {
+        // GIVEN - A new task saved in the database.
+        val newReminder =
+            ReminderDTO("title", "description", "a place", randomLatOrLong(), randomLatOrLong())
+        localDataSource.saveReminder(newReminder)
+
+        // WHEN  - Reminder retrieved by the wrong ID.
+        val result = localDataSource.getReminder("wrong id")
+
+        // THEN - Error is returned.
+
+        assertThat(result.succeeded, `is`(false))
+        result as Result.Error
+        //assertThat(result.message, `is`())
 
     }
 

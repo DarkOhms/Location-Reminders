@@ -2,6 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="RemindersLocalRepositoryTest">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\luke_\.android\avd\Nexus_5_API_27.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-17T21:56:32.615830700Z" />
+        </State>
+      </entry>
       <entry key="app">
         <State />
       </entry>
@@ -11,14 +27,53 @@
       <entry key="createReminder_confirmReminderDisplays()">
         <State />
       </entry>
+      <entry key="deleteReminders()">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\luke_\.android\avd\Nexus_5_API_27.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-17T21:57:29.121335600Z" />
+        </State>
+      </entry>
       <entry key="getReminder_retrievesReminder()">
-        <State />
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\luke_\.android\avd\Nexus_5_API_27.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-17T21:58:33.936330800Z" />
+        </State>
       </entry>
-      <entry key="reminderAdded_DisplayedInUi()">
-        <State />
-      </entry>
-      <entry key="whenErrorCondition_ToastDisplayedInUi()">
-        <State />
+      <entry key="getReminder_shouldReturnError()">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\luke_\.android\avd\Nexus_5_API_27.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-17T21:59:56.290430Z" />
+        </State>
       </entry>
     </value>
   </component>

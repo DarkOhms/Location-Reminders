@@ -48,12 +48,6 @@ class SelectLocationFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //check api level for background permissions flow
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (!isBackgroundPermissionGranted()) {
-                requestBackgroundPermission()
-            }
-        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -80,7 +74,7 @@ class SelectLocationFragment : BaseFragment() {
         val locationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         @SuppressLint("MissingPermission")
-        if(isPermissionGranted()){
+        if(isLocationPermissionGranted()){
             val locationResultTask = locationClient.lastLocation
             locationResultTask.addOnSuccessListener { location:Location? ->
                 currentLocation = location
@@ -102,7 +96,7 @@ class SelectLocationFragment : BaseFragment() {
             map.uiSettings.isZoomControlsEnabled = true
             var latLng = LatLng(-34.0, 151.0)
             @SuppressLint("MissingPermission")
-            if(isPermissionGranted()){
+            if(isLocationPermissionGranted()){
                 enableMyLocation()
                 Log.d("MapsAsync" , "Permission is Granted")
                 val locationResultTask = locationClient.lastLocation
@@ -131,7 +125,7 @@ class SelectLocationFragment : BaseFragment() {
         return binding.root
     }
 
-    private fun isPermissionGranted() : Boolean {
+    private fun isLocationPermissionGranted() : Boolean {
 
         return ContextCompat.checkSelfPermission(
             requireContext(),
@@ -139,7 +133,7 @@ class SelectLocationFragment : BaseFragment() {
     }
 
     private fun enableMyLocation() {
-        map.isMyLocationEnabled = isPermissionGranted()
+        map.isMyLocationEnabled = isLocationPermissionGranted()
     }
 
     private fun setPoiClick(map: GoogleMap) {
@@ -259,30 +253,4 @@ class SelectLocationFragment : BaseFragment() {
         }
     }
 
-    private fun isBackgroundPermissionGranted() : Boolean {
-
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    fun requestBackgroundPermission(){
-        val requestPermissionLauncher = this.registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { results ->
-            val backgroundLocationGranted: Boolean = results.getValue("android.permission.ACCESS_BACKGROUND_LOCATION")
-            if (backgroundLocationGranted) {
-                // Permission granted, proceed with map functionality
-                Log.d("requestBackgroundPermission", "granted")
-            } else {
-                // Permission denied, handle the scenario
-                Log.d("requestBackgroundPermission", "denied")
-            }
-        }
-
-        val permissions = arrayOf(
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-        requestPermissionLauncher.launch(permissions)
-    }
 }

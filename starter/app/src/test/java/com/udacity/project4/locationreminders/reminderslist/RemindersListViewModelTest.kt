@@ -63,6 +63,21 @@ class RemindersListViewModelTest {
 
     }
 
+    @Test
+    @ExperimentalCoroutinesApi
+    fun loadRemindersWhenUnavailable_shouldReturnError() = mainCoroutineRule.runBlockingTest {
+        //GIVEN an error state from the datasource
+        dataSource.setShouldReturnError(true)
+
+        //WHEN the viewmodel tries to loadreminders
+        viewModel.loadReminders()
+
+        //THEN the show noData LiveData returns true
+        MatcherAssert.assertThat(viewModel.showNoData.getOrAwaitValue(), Is.`is`(true))
+
+
+    }
+
     fun randomLatOrLong(): Double {
         val min = -180.0 // Minimum allowed value (longitude)
         val max = 180.0  // Maximum allowed value (longitude, can be adjusted for latitude)
